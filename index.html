@@ -26,7 +26,7 @@
 
             <h2 v-if="isAuthorVisible">Новости {{ author }}</h2>
 
-            <div v-for="item in news" class="list">
+            <div v-for="item in news" class="item">
                 <router-link :to="{ name: 'newsItem', params: {id: item.id}}">{{ item.title }}</router-link>
                 <p class="created-at">{{ item.created_at }}</p>
                 <p>{{ item.content }}</p>

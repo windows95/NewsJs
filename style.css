@@ -61,3 +61,6 @@ header {
     .news-list-container .created-at {
         color: #999999;
     }
+    .news-list-container .item {
+        margin-top: 40px;
+    }
