@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Чудо новости</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="/javascript/news-list.js"></script>
+    <script src="/javascript/news-item.js"></script>
+    <script src="/javascript/news-by-author.js"></script>
+    <script src="/javascript/create-form.js"></script>
+    <script src="/javascript/edit-form.js"></script>
+    <script src="/javascript/router.js"></script>
+
+    <script type="text/x-template" id="news-list-template">
+        <div class="news-list-container">
+            <div class="buttons-container">
+                <router-link :to="{ name: 'createForm'}" tag="button">Добавить</router-link>
+            </div>
+
+            <div v-for="item in news" class="list">
+                <router-link :to="{ name: 'newsItem', params: {id: item.id}}">{{ item.title }}</router-link>
+                <p class="created-at">{{ item.created_at }}</p>
+                <p>{{ item.content }}</p>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="news-item-template">
+        <div class="news-item-container">
+            <div class="buttons-container">
+                <router-link :to="{ name: 'newsList' }" tag="button">К списку новостей</router-link>
+                <router-link :to="{ name: 'editForm', params: {id: id}}" tag="button">Редактировать</router-link>
+            </div>
+
+            <h2>{{ title }}</h2>
+            <span class="created-at">{{ createdAt }}</span> &mdash; <router-link :to="{ name: 'newsByAuthor', params: {id: authorId}}">{{ authorName }}</router-link>
+            <p class="content">{{ content }}</p>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="form-template">
+        <div class="form-container">
+            <div class="buttons-container">
+                <router-link :to="{ name: 'newsList' }" tag="button">К списку новостей</router-link>
+            </div>
+
+            <form>
+                <h2>Заголовок</h2>
+                <textarea rows="2" v-model="item.title" ref="firstInput" v-bind:class="{ error: !titleIsValid }"></textarea>
+
+                <h2>Автор</h2>
+                <select v-model="item.author" v-bind:class="{ error: !authorIsValid }">
+                    <option disabled v-if="isFirstOptionVisible">Выберите автора</option>
+                    <option v-for="auth in authors" :value="auth.id">{{ auth.first_name }} {{ auth.last_name }}</option>
+                </select>
+
+                <h2>Текст новости</h2>
+                <textarea rows="10" v-model="item.content" v-bind:class="{ error: !contentIsValid }"></textarea>
+
+                <br><br>
+                <input type="button" :value="btnTitle" @click="processForm" :disabled="isBtnDisabled">
+
+                <p v-if="serverError" class="error-message">Не удалось сохранить заметку</p>
+            </form>
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        const rootUrl = 'http://news.app.local/api/';
+
+        window.addEventListener('load', function() {
+            const app = new Vue({
+                el: '#app',
+                router: router,
+                components: {
+                    'newsList': NewsList,
+                    'newsItem': NewsItem,
+                    'newsByAuthor': NewsByAuthor,
+                    'createForm': CreateForm,
+                    'editForm': EditForm
+                  }
+            });
+        })
+    </script>
+</head>
+<body>
+
+    <div id="app" class="container">
+
+        <header>
+            <h1><a href="/">Чудо-новости.рф</a></h1>
+        </header>
+        <router-view></router-view>
+    </div>
+
+</body>
+</html>
