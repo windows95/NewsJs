@@ -24,6 +24,8 @@
                 <router-link :to="{ name: 'createForm'}" tag="button">Добавить</router-link>
             </div>
 
+            <h2 v-if="isAuthorVisible">Новости {{ author }}</h2>
+
             <div v-for="item in news" class="list">
                 <router-link :to="{ name: 'newsItem', params: {id: item.id}}">{{ item.title }}</router-link>
                 <p class="created-at">{{ item.created_at }}</p>

@@ -4,7 +4,8 @@ const NewsList = {
     data() {
         return {
             news: [],
-            url: rootUrl + 'news'
+            url: rootUrl + 'news',
+            isAuthorVisible: false
         }
     },
     mounted() {
